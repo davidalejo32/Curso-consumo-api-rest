@@ -40,7 +40,40 @@
 
          </div>
       </section>
+
+      <section class="uploading">
+         <h2 class="uploading__title">Sube la foto de tu muchi</h2>
+
+         <div class="uploading__form-container">
+            <form class="uploading__form">
+               <!-- name es para que el form data guarte ese archivo que se sube en un objeto tipo nombre:valor -->
+               <label for="uploading__form-file" class=""><i class='bx bx-upload uploading__form-file--icon'></i></label>
+               <span class="uploading__error"></span>
+               <input type="file" name="file" id="uploading__form-file">
+               <button class="uploading__form-submit", type="button">Subir foto</button>
+            </form>
+         </div>
+
+      </section>
+
+      <section class="myPhotos">
+         <h2 class="myPhotos__title">My Photos</h2>
+
+         <div class="myPhotos-cards__container">
+
+<!--             <article class="fovorites__card">
+               <img src="" alt="" class="favorites__image">
+               <button class="favorites__botton"></button>
+            </article> -->
+
+         </div>
+      </section>
+
+
    </main>
+   <!-- axios -->
+   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
    <script src="./js/main.js"></script>
+   <script src="./axios/axios.js"></script>
 </body>
 </html>
