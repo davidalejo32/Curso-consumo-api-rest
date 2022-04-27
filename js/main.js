@@ -1,8 +1,13 @@
 const URL_RANDOM = 'https://api.thecatapi.com/v1/images/search?limit=3';
 
-const URL_FAVORITES = 'https://api.thecatapi.com/v1/favourites?api_key=5e64c61b-3fc5-4e62-84d0-a963792d5e91';
+const URL_FAVORITES = 'https://api.thecatapi.com/v1/favourites';
 
-const URL_FAVORITES_DELETE = (id) => `https://api.thecatapi.com/v1/favourites/${id}?api_key=5e64c61b-3fc5-4e62-84d0-a963792d5e91`;
+const URL_FAVORITES_DELETE = (id) => `https://api.thecatapi.com/v1/favourites/${id}`;
+
+const URL_UPLOAD_PHOTO= 'https://api.thecatapi.com/v1/images/upload';
+
+const URL__MY_UPLOAD = 'https://api.thecatapi.com/v1/images';
+
 
 
 //  esta funcion trae 3 gatos aleatorios y los carga en el html
@@ -64,7 +69,8 @@ const saveFavorites = async (id) => {
    const request = await fetch(URL_FAVORITES, {
       method: 'POST',
       headers: {
-         'Content-Type': 'application/json'
+         'Content-Type': 'application/json',
+         'X-API-KEY': '5e64c61b-3fc5-4e62-84d0-a963792d5e91'
       },
       body: JSON.stringify({
          image_id: id
@@ -81,11 +87,17 @@ const saveFavorites = async (id) => {
    }
 }
 
+// cargar las imagenes de favoritos
 
 const loadFavorites = async () => {
-   const request = await fetch(URL_FAVORITES);
+   const request = await fetch(URL_FAVORITES, {
+      method: 'GET',
+      headers: {
+         'X-API-KEY': '5e64c61b-3fc5-4e62-84d0-a963792d5e91'
+      }
+   });
    const data = await request.json();
-   console.log(data)
+   
    const favoritesContainer = document.querySelector(".favorites-cards__container");
 
    favoritesContainer.innerHTML = "";
@@ -128,10 +140,13 @@ const loadFavorites = async () => {
 
 loadFavorites()
 
-
+// borrar las imagenes de favoritos
 const deleteFavorites = async (id) => {
    const request = await fetch(URL_FAVORITES_DELETE(id),{
       method: 'DELETE',
+      headers: {
+         'X-API-KEY': '5e64c61b-3fc5-4e62-84d0-a963792d5e91'
+      }
    });
 
    const data = await request.json();
@@ -144,3 +159,102 @@ const deleteFavorites = async (id) => {
    }
 
 }
+
+// etiqueta a de error por si no selecciona ningun archivo
+const uploadinError = document.querySelector('.uploading__error');
+
+// subir una imagen 
+const uploadPhoto = async () => {
+   const form = document.querySelector(".uploading__form");
+   const formData = new FormData(form);
+   // console.log(formData.get('file'));
+
+   if(formData.get('file').name === ""){
+      uploadinError.style.color = "#C0392B";
+      uploadinError.textContent = "Debe cargar una imagen";
+
+   }else {
+      uploadinError.style.color = "#black";
+      uploadinError.textContent = "subiendo imagen ...."
+   const request = await fetch(URL_UPLOAD_PHOTO, {
+      
+      method: 'POST',
+      headers: {
+         // 'Content-Type': 'multipart/form-data',
+         'X-API-KEY': '5e64c61b-3fc5-4e62-84d0-a963792d5e91',
+      },
+      body: formData,
+   });
+
+   const data = await request.json();
+   if(request.status !== 201) {
+      console.error(`Error: ${request.status} la imagen no se subio`);
+   }else {
+      uploadMyImage();
+      console.log(`Imagen subida exitosamente`);
+      console.log(({data}));
+      console.log(data.url);
+      uploadinError.style.color = "#28B463";
+      uploadinError.textContent = "Imagen Cargada con Exito"
+   }
+}
+
+}
+
+
+// carga el input
+let inputForm = document.querySelector("#uploading__form-file");
+
+// pone el nombre del archivo que se cargo
+inputForm.addEventListener('change', () => {
+   uploadinError.style.color = "black"
+   uploadinError.textContent = inputForm.files[0].name;
+})
+
+// carga el boton del form
+const buttonForm = document.querySelector('.uploading__form-submit');
+// cuando le de click al boton me va a ejecutar esa funcion
+buttonForm.addEventListener('click', () => uploadPhoto() )
+
+
+const uploadMyImage = async() => {
+   const request = await fetch(URL__MY_UPLOAD, {
+      method: 'GET',
+      headers: {
+         'X-API-KEY': '5e64c61b-3fc5-4e62-84d0-a963792d5e91',
+      }     
+   });
+
+   const data = await request.json();
+   
+   console.log(data);
+
+   let myPhotosContainer = document.querySelector('.myPhotos-cards__container');
+   myPhotosContainer.innerHTML = "";
+   data.forEach(element => {
+      const article = document.createElement("article");
+      article.className = "myPhotos__card";
+
+      const img = document.createElement("img");
+      img.className = "myPhotos__image";
+      img.src = element.url
+
+      const div = document.createElement("div");
+      div.className = "myPhotos-button__container";
+
+      const btnBackground = document.createElement("i");
+      btnBackground.className = "bx bxs-heart myPhotos__button--background";
+
+      btnBackground.addEventListener('click', () => {
+         btnBackground.style.opacity = 0;
+      })
+
+      div.appendChild(btnBackground)
+
+      article.appendChild(img);
+      article.appendChild(div);
+      myPhotosContainer.appendChild(article);
+   })
+}
+
+uploadMyImage();
