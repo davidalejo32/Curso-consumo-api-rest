@@ -1,0 +1,58 @@
+.uploading {
+   width: 90%;
+   height: 100%;
+   margin: 50px auto;
+   
+   &__title {
+      margin: 100px auto;
+      text-transform: capitalize;
+      text-align: center;
+      font-size: 30px;
+      font-weight: 600;
+   }
+
+   &__form-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+   }
+
+   &__form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+   }
+
+   &__form-file--icon {
+      font-size: 100px;
+      cursor: pointer;
+      color: $color-primary;
+      transition: all 0.2s ease-in;
+   }
+
+   &__form-file--icon:hover {
+      color: rgb(53, 53, 53);
+   }
+
+   #uploading__form-file{
+      display: none;
+   }
+
+   &__form-submit{
+      margin-top: 20px;
+      padding: 10px 40px;
+      background-color: $color-primary;
+      color: #fff;
+      font-size: 20px;
+      border: 1px solid $color-primary;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+   }
+
+   &__form-submit:hover {
+      color: $color-primary;
+      background-color: #fff;
+   }
+}
