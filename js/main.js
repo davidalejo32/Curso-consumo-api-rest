@@ -10,11 +10,20 @@ const URL__MY_UPLOAD = 'https://api.thecatapi.com/v1/images';
 
 
 
+
+const loadJsonApiKey = async() => {
+   const request = await fetch('../api_key.json');
+   const data = await request.json();
+   return data.api_key
+}
+
+
+
 //  esta funcion trae 3 gatos aleatorios y los carga en el html
 const loadRandom = async () => {
    const request = await fetch(URL_RANDOM);
    const data = await request.json();
-   console.log(data)
+   // console.log(data)
    const randoCardsContainer = document.querySelector(".random-cards__container");
    randoCardsContainer.innerHTML = "";
    data.forEach((element, index) => {
@@ -70,7 +79,7 @@ const saveFavorites = async (id) => {
       method: 'POST',
       headers: {
          'Content-Type': 'application/json',
-         'X-API-KEY': '5e64c61b-3fc5-4e62-84d0-a963792d5e91'
+         'X-API-KEY': await loadJsonApiKey()
       },
       body: JSON.stringify({
          image_id: id
@@ -93,7 +102,7 @@ const loadFavorites = async () => {
    const request = await fetch(URL_FAVORITES, {
       method: 'GET',
       headers: {
-         'X-API-KEY': '5e64c61b-3fc5-4e62-84d0-a963792d5e91'
+         'X-API-KEY': await loadJsonApiKey()
       }
    });
    const data = await request.json();
@@ -145,7 +154,7 @@ const deleteFavorites = async (id) => {
    const request = await fetch(URL_FAVORITES_DELETE(id),{
       method: 'DELETE',
       headers: {
-         'X-API-KEY': '5e64c61b-3fc5-4e62-84d0-a963792d5e91'
+         'X-API-KEY': await loadJsonApiKey()
       }
    });
 
@@ -181,7 +190,7 @@ const uploadPhoto = async () => {
       method: 'POST',
       headers: {
          // 'Content-Type': 'multipart/form-data',
-         'X-API-KEY': '5e64c61b-3fc5-4e62-84d0-a963792d5e91',
+         'X-API-KEY': await loadJsonApiKey()
       },
       body: formData,
    });
@@ -221,13 +230,13 @@ const uploadMyImage = async() => {
    const request = await fetch(URL__MY_UPLOAD, {
       method: 'GET',
       headers: {
-         'X-API-KEY': '5e64c61b-3fc5-4e62-84d0-a963792d5e91',
+         'X-API-KEY': await loadJsonApiKey()
       }     
    });
 
    const data = await request.json();
    
-   console.log(data);
+   // console.log(data);
 
    let myPhotosContainer = document.querySelector('.myPhotos-cards__container');
    myPhotosContainer.innerHTML = "";
