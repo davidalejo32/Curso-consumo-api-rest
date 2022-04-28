@@ -9,13 +9,7 @@ const URL_UPLOAD_PHOTO= 'https://api.thecatapi.com/v1/images/upload';
 const URL__MY_UPLOAD = 'https://api.thecatapi.com/v1/images';
 
 
-
-
-const loadJsonApiKey = async() => {
-   const request = await fetch('../api_key.json');
-   const data = await request.json();
-   return data.api_key
-}
+import { API_KEY } from "./api_key.js";
 
 
 
@@ -79,7 +73,7 @@ const saveFavorites = async (id) => {
       method: 'POST',
       headers: {
          'Content-Type': 'application/json',
-         'X-API-KEY': await loadJsonApiKey()
+         'X-API-KEY': API_KEY
       },
       body: JSON.stringify({
          image_id: id
@@ -102,7 +96,7 @@ const loadFavorites = async () => {
    const request = await fetch(URL_FAVORITES, {
       method: 'GET',
       headers: {
-         'X-API-KEY': await loadJsonApiKey()
+         'X-API-KEY': API_KEY
       }
    });
    const data = await request.json();
@@ -154,7 +148,7 @@ const deleteFavorites = async (id) => {
    const request = await fetch(URL_FAVORITES_DELETE(id),{
       method: 'DELETE',
       headers: {
-         'X-API-KEY': await loadJsonApiKey()
+         'X-API-KEY': API_KEY
       }
    });
 
@@ -190,7 +184,7 @@ const uploadPhoto = async () => {
       method: 'POST',
       headers: {
          // 'Content-Type': 'multipart/form-data',
-         'X-API-KEY': await loadJsonApiKey()
+         'X-API-KEY': API_KEY
       },
       body: formData,
    });
@@ -230,7 +224,7 @@ const uploadMyImage = async() => {
    const request = await fetch(URL__MY_UPLOAD, {
       method: 'GET',
       headers: {
-         'X-API-KEY': await loadJsonApiKey()
+         'X-API-KEY': API_KEY
       }     
    });
 
